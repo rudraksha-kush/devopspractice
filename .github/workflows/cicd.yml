@@ -73,5 +73,21 @@ jobs:
       with:
         name: app-jar
         path: target/*.jar 
-    
+
+  docker_build:
+    runs-on: ubuntu-latest
+    needs: build_project
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download JAR artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-jar
+          path: target
+
+      - name: Build Docker image
+        run: |
+          docker build -t bankapp:${{ github.sha }} .
+
   
